@@ -7,8 +7,10 @@ export default class AllArtists extends Component {
   constructor () {
     super();
     this.state = {
-      artists: []
+      artists: [],
+      searchTerm: ''
     };
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount () {
@@ -17,16 +19,28 @@ export default class AllArtists extends Component {
       .then(artists => this.setState({ artists }));
   }
 
+  onChange(e) {
+    this.setState({searchTerm: e.target.value});
+  }
+
   render () {
 
     const artists = this.state.artists;
+    const searchTerm = this.state.searchTerm;
 
     return (
       <div>
         <h3>Artists</h3>
+        <form className="form-group" style={{marginTop: '20px'}}>
+        <input
+          className="form-control"
+          placeholder="Enter artist name"
+          onChange={this.onChange}
+        />
+        </form>
         <div className="list-group">
           {
-            artists.map(artist => {
+            artists.filter((artist) => artist.name.includes(searchTerm)).map(artist => {
               return (
                 <div className="list-group-item" key={artist.id}>
                   <Link to={`/artists/${artist.id}`}>{ artist.name }</Link>

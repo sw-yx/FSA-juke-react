@@ -11,14 +11,21 @@ export default class SingleAlbum extends Component {
     };
   }
 
+  getAlbum(albumId) {
+    axios.get(`/api/albums/${albumId}`)
+    .then(res => res.data)
+    .then(album => this.setState({ album }));
+  }
+
   componentDidMount () {
     const albumId = this.props.match.params.albumId;
+    this.getAlbum(albumId);
+  }
 
-    axios.get(`/api/albums/${albumId}`)
-      .then(res => res.data)
-      .then(album => this.setState({
-        album
-      }));
+  componentWillReceiveProps (nextProps) {
+    const albumId = this.props.match.params.albumId;
+    const nextalbumId = nextProps.match.params.albumId;
+    if (albumId !== nextalbumId) this.getAlbum(nextalbumId);
   }
 
   render () {
