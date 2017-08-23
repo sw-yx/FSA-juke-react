@@ -10,7 +10,7 @@
     "test:player": "node_modules/.bin/testem",
     "seed": "node ./bin/seed",
     "db-init": "pg-init juke",
-    "postinstall": "npm run db-init && webpack"
+    "postinstall": "webpack"
   },
   "dependencies": {
     "axios": "^0.15.2",
