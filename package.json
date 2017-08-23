@@ -9,7 +9,8 @@
     "test": "./node_modules/.bin/mocha server/**/*.test.js --reporter spec",
     "test:player": "node_modules/.bin/testem",
     "seed": "node ./bin/seed",
-    "db-init": "pg-init juke"
+    "db-init": "pg-init juke",
+    "postinstall": "npm run db-init && webpack"
   },
   "dependencies": {
     "axios": "^0.15.2",
