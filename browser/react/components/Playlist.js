@@ -9,9 +9,9 @@ export default class Playlist extends React.Component {
     super();
     this.state = {
       selectedPlaylist: [],
-
+      errorMsg: null
     };
-    // this.onChange = this.onChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   getPlaylist (playlistId) {
@@ -31,20 +31,29 @@ export default class Playlist extends React.Component {
     if (playlistId !== nextplaylistId) this.getPlaylist(nextplaylistId);
   }
 
-  handleSubmit () {
-
+  handleSubmit (value) {
+    const playlistId = this.props.match.params.playlistId;
+    axios.post(`/api/playlists/${playlistId}/songs`, {id: value})
+    .then(() => axios.get(`/api/playlists/${playlistId}`))
+    .then(result => {
+      this.setState({selectedPlaylist: result.data, errorMsg: null});
+    })
+    .catch((error) => this.setState({errorMsg: error.response.data}));
   }
 
   render() {
   const playlist = this.state.selectedPlaylist;
-
+  const nameWarning = (this.state.errorMsg) ?
+    <div className="alert alert-warning">{this.state.errorMsg}</div> :
+    <div></div>
   return (
     <div>
       <h3>{ playlist.name }</h3>
       <Songs songs={playlist.songs} /> {/** Hooray for reusability! */}
       { playlist.songs && !playlist.songs.length && <small>No songs.</small> }
       <hr />
-      <AddSongForm />
+      {nameWarning}
+      <AddSongForm handleSubmit = {this.handleSubmit} />
     </div>
     );
   }

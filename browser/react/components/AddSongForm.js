@@ -6,25 +6,24 @@ export default class AddSongForm extends Component {
   constructor() {
     super()
     this.state = {
-      input: '',
-      dirty: false,
+      selectedSong: 1,
       allSongs: []
     };
+
     axios.get('/api/songs/').then((data) => {
       this.setState({allSongs: data.data})})
+
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   onChange(e) {
-    this.setState({input: e.target.value, dirty: true});
-
+    this.setState({selectedSong: e.target.value});
   }
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.mainSubmit(this.state.input);
-    this.setState({input: ''});
+    this.props.handleSubmit(this.state.selectedSong);
   }
 
   render() {
@@ -37,7 +36,7 @@ export default class AddSongForm extends Component {
             <label htmlFor="song" className="col-xs-2 control-label">Song</label>
             <div className="col-xs-10">
               <select className="form-control" name="song" onChange={this.onChange}>
-                {this.state.allSongs.map(song => <option value="SONGID_GOES_HERE" key={song.id}>{song.name}</option>)}
+                {this.state.allSongs.map(song => <option value={song.id} key={song.id}>{song.name}</option>)}
               </select>
             </div>
           </div>
@@ -49,7 +48,7 @@ export default class AddSongForm extends Component {
         </fieldset>
       </form>
     </div>
-      );
+    );
   }
 }
 
