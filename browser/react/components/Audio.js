@@ -51,6 +51,7 @@ export default class Audio extends Component {
     this.toggleOne = this.toggleOne.bind(this);
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
+    this.scrubProgress = this.scrubProgress.bind(this);
   }
 
   componentDidMount () {
@@ -107,6 +108,15 @@ export default class Audio extends Component {
   setProgress (progress) {
     this.setState({ progress: progress });
   }
+  scrubProgress (e) {
+    const x = e.target.getBoundingClientRect()
+    const myLeft = x.left
+    const parentRight = x.right
+    const clickX = e.clientX
+    const calc = (clickX - myLeft)/(parentRight - myLeft)
+    AUDIO.currentTime = AUDIO.duration * calc
+  }
+
 
   render () {
     /**
@@ -121,6 +131,7 @@ export default class Audio extends Component {
         next={this.next}
         toggleOne={this.toggleOne}
         toggle={this.toggle}
+        scrubProgress={this.scrubProgress}
       />
     );
   }

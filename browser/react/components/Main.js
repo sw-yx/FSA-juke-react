@@ -34,6 +34,7 @@ export default class Main extends Component {
   }
 
   render () {
+    console.log('this.props', this.props)
     return (
       <Router>
         <div id="main" className="container-fluid">
@@ -43,7 +44,7 @@ export default class Main extends Component {
           <div className="col-xs-10">
             <Switch>
               <Route exact path="/albums" component={StatefulAlbums} />
-              <Route path="/albums/:albumId" component={SingleAlbum} />
+              <Route path="/albums/:albumId" render={({match}) => <SingleAlbum {...this.props} match={match}/>} />
               <Route exact path="/artists" component={AllArtists} />
               <Route path="/artists/:artistId" component={SingleArtist} />
               <Route path="/playlist/:playlistId" component={Playlist} />
@@ -51,9 +52,17 @@ export default class Main extends Component {
               <Route component={StatefulAlbums} />
             </Switch>
           </div>
-          <Player />
+          <Player {...this.props}/>
         </div>
     </Router>
     );
   }
 }
+
+
+              // <Route exact path="/albums" render={() => <StatefulAlbums {...this.props} />} />
+              // <Route path="/albums/:albumId" render={() => <SingleAlbum {...this.props} />} />
+              // <Route exact path="/artists" render={() => <AllArtists {...this.props} />} />
+              // <Route path="/artists/:artistId" render={() => <SingleArtist {...this.props} />} />
+              // <Route path="/playlist/:playlistId" render={() => <Playlist {...this.props} />} />
+              // <Route path="/new-playlist" render={() => <NewPlayList mainSubmit = {this.mainSubmit} />} />

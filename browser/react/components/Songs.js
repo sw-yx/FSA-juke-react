@@ -19,7 +19,7 @@ const Songs = (props) => {
           songs && songs.map(song => (
             <tr key={song.id}>
               <td>
-                <button className="btn btn-default btn-xs">
+                <button className="btn btn-default btn-xs" onClick={() => props.toggleOne(song, songs)}>
                   <span className="glyphicon glyphicon-play"></span>
                 </button>
               </td>
