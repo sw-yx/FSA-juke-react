@@ -12218,6 +12218,14 @@ var skip = function skip(interval, _ref) {
   return [next, currentSongList];
 };
 
+var shuffle = function shuffle(a) {
+  for (var i = a.length; i; i--) {
+    var j = Math.floor(Math.random() * i);
+    var _ref2 = [a[j], a[i - 1]];
+    a[i - 1] = _ref2[0];
+    a[j] = _ref2[1];
+  }
+};
 // The stateful Audio component
 
 var Audio = function (_Component) {
@@ -12232,7 +12240,9 @@ var Audio = function (_Component) {
       currentSong: {},
       currentSongList: [],
       isPlaying: false,
-      progress: 0
+      progress: 0,
+      randomMode: false,
+      randomList: []
     };
 
     _this.toggle = _this.toggle.bind(_this);
@@ -12240,6 +12250,7 @@ var Audio = function (_Component) {
     _this.next = _this.next.bind(_this);
     _this.prev = _this.prev.bind(_this);
     _this.scrubProgress = _this.scrubProgress.bind(_this);
+    _this.toggleRandom = _this.toggleRandom.bind(_this);
     return _this;
   }
 
@@ -12288,6 +12299,15 @@ var Audio = function (_Component) {
     key: 'toggleOne',
     value: function toggleOne(selectedSong, selectedSongList) {
       if (selectedSong.id !== this.state.currentSong.id) this.startSong(selectedSong, selectedSongList);else this.toggle();
+    }
+  }, {
+    key: 'toggleRandom',
+    value: function toggleRandom() {
+      if (randomMode) this.setState({ randomMode: false });else {
+        var newRandomList = this.state.currentSongList;
+        shuffle(newRandomList);
+        this.setState({ randomMode: true, randomList: newRandomList });
+      }
     }
   }, {
     key: 'toggle',
@@ -13752,12 +13772,19 @@ var Player = function Player(props) {
         _react2.default.createElement(
           "button",
           { className: "btn btn-default", onClick: props.toggle },
-          _react2.default.createElement("span", { className: "glyphicon glyphicon-play" })
+          !props.isPlaying ? _react2.default.createElement("span", { className: "glyphicon glyphicon-play" }) : _react2.default.createElement("span", { className: "glyphicon glyphicon-pause" })
         ),
         _react2.default.createElement(
           "button",
           { className: "btn btn-default", onClick: props.next },
           _react2.default.createElement("span", { className: "glyphicon glyphicon-step-forward" })
+        ),
+        _react2.default.createElement(
+          "button",
+          { className: "btn btn-default " + (props.randomMode ? "active" : ""), onClick: function onClick() {
+              return props.toggleRandom();
+            } },
+          _react2.default.createElement("span", { className: "glyphicon glyphicon-random" })
         )
       ),
       _react2.default.createElement(
@@ -13990,6 +14017,16 @@ var Sidebar = function Sidebar(props) {
           { className: 'btn btn-primary btn-block', to: '/new-playlist' },
           _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' }),
           ' PLAYLIST'
+        )
+      ),
+      _react2.default.createElement('hr', null),
+      _react2.default.createElement(
+        'h4',
+        { className: 'menu-item' },
+        _react2.default.createElement(
+          'a',
+          { href: 'https://github.com/sw-yx/FSA-juke-react', target: '_blank' },
+          'Source (Github)'
         )
       )
     )

@@ -10,10 +10,14 @@ const Player = (props) => {
             <span className="glyphicon glyphicon-step-backward"></span>
           </button>
           <button className="btn btn-default" onClick={props.toggle}>
-            <span className="glyphicon glyphicon-play"></span>
+              {!props.isPlaying ? <span className="glyphicon glyphicon-play"></span>
+              : <span className="glyphicon glyphicon-pause"></span>}
           </button>
           <button className="btn btn-default" onClick={props.next}>
             <span className="glyphicon glyphicon-step-forward"></span>
+          </button>
+          <button className={"btn btn-default "  + (props.randomMode ? "active" : "") } onClick={()=>props.toggleRandom()}>
+              <span className={"glyphicon glyphicon-random"}></span>
           </button>
         </div>
         <div className="bar">

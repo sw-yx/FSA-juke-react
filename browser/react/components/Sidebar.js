@@ -32,6 +32,8 @@ const Sidebar = (props) => {
             <span className="glyphicon glyphicon-plus"></span> PLAYLIST
           </Link>
         </h4>
+        <hr />
+        <h4 className="menu-item"><a href="https://github.com/sw-yx/FSA-juke-react/tree/part3-starting" target="_blank">Source (Github)</a></h4>
       </section>
 
     </sidebar>

@@ -34,6 +34,12 @@ const skip = (interval, { currentSongList, currentSong }) => {
   return [next, currentSongList];
 };
 
+const shuffle=(a) => {
+    for (let i = a.length; i; i--) {
+        let j = Math.floor(Math.random() * i);
+        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
+}
 // The stateful Audio component
 
 export default class Audio extends Component {
@@ -44,7 +50,9 @@ export default class Audio extends Component {
       currentSong: {},
       currentSongList: [],
       isPlaying: false,
-      progress: 0
+      progress: 0,
+      randomMode: false,
+      randomList: [],
     };
 
     this.toggle = this.toggle.bind(this);
@@ -52,6 +60,7 @@ export default class Audio extends Component {
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
     this.scrubProgress = this.scrubProgress.bind(this);
+    this.toggleRandom = this.toggleRandom.bind(this);
   }
 
   componentDidMount () {
@@ -90,6 +99,14 @@ export default class Audio extends Component {
     if (selectedSong.id !== this.state.currentSong.id)
       this.startSong(selectedSong, selectedSongList);
     else this.toggle();
+  }
+  toggleRandom () {
+    if (randomMode) this.setState({randomMode: false})
+    else {
+      const newRandomList = this.state.currentSongList
+      shuffle(newRandomList)
+      this.setState({randomMode: true, randomList: newRandomList})
+    }
   }
 
   toggle () {
